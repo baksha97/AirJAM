@@ -23,7 +23,7 @@ public class Plane {
 			First.addPassenger(duo2, duo1);
 		}
 		else{
-			System.out.println("ERROR: Plane.class cannot add you to First Class because you have entered illegal arguements for seating preference.");
+			System.out.println("ERROR: Plane.class cannot add you to First Class because you have entered illegal arguments for seating preference.");
 		}
 	}
 	
