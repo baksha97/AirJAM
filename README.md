@@ -14,7 +14,11 @@ The objective of this assignment involved using Object Oriented Design and Progr
 # Revival Period
 _January 2019 - TBD_
 
- I have proposed the reimplementation of the project using updated skills in OOD, OOP, and unit testing. It is my hope that the project can further showcase skills in these areas. 
+ I have proposed the reimplementation of the project using updated skills in OOD, OOP, and unit testing. It is my hope that the project can further showcase my skills in these areas. 
+ 
+ Feel free to:
+ - Use parts of this project as you see fit under the license. 
+ - Contribute.
  
  
  Stay tuned.
