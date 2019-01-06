@@ -10,14 +10,16 @@ public class Party {
     private ArrayList<Person> members;
     private CabinType requestedCabin;
     private HashSet<SeatType> requestedSeatTypes;
+    private HashSet<SeatType> openSeatTypes;
 
     public Party(CabinType requestedCabin, Person... people) {
-        if (people.length > MAX_SIZE) throw new IllegalStateException("Parties cannot be larger than three");
-
         setMembers(new ArrayList<>());
         setRequestedSeatTypes(new HashSet<>());
         setRequestedCabin(requestedCabin);
+        addPerson(people);
+    }
 
+    public void addPerson(Person... people){
         for (Person p : people) {
             members.add(p);
             if (requestedSeatTypes.contains(p.getSeatPreference()))
@@ -26,8 +28,12 @@ public class Party {
                 throw new IllegalArgumentException("There exists no center seat in First class.");
             requestedSeatTypes.add(p.getSeatPreference());
         }
+        if (members.size() > MAX_SIZE) throw new IllegalStateException("Parties cannot be larger than three");
     }
 
+    public boolean isFull(){
+        return members.size() > MAX_SIZE;
+    }
     public String toString() {
         return members.toString();
     }
@@ -46,6 +52,18 @@ public class Party {
 
     private void setRequestedCabin(CabinType requestedCabin) {
         this.requestedCabin = requestedCabin;
+        setOpenSeatTypes(new HashSet<>());
+        switch(requestedCabin){
+            case FIRST:
+                openSeatTypes.add(SeatType.WINDOW);
+                openSeatTypes.add(SeatType.AISLE);
+                break;
+            case ECONOMY:
+                openSeatTypes.add(SeatType.WINDOW);
+                openSeatTypes.add(SeatType.CENTER);
+                openSeatTypes.add(SeatType.AISLE);
+                break;
+        }
     }
 
     public HashSet<SeatType> getRequestedSeatTypes() {
@@ -56,4 +74,11 @@ public class Party {
         this.requestedSeatTypes = requestedSeatTypes;
     }
 
+    public HashSet<SeatType> getOpenSeatTypes() {
+        return openSeatTypes;
+    }
+
+    private void setOpenSeatTypes(HashSet<SeatType> openSeatTypes) {
+        this.openSeatTypes = openSeatTypes;
+    }
 }

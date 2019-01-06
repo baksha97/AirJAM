@@ -14,15 +14,18 @@ public class Plane {
         cabins.put(CabinType.ECONOMY, new Cabin(CabinType.ECONOMY, size));
     }
 
-    public boolean addParty(Party p) {
-        if (cabins.get(p.getRequestedCabin()).addParty(p)) {
-            System.out.println("Party: " + p);
-            System.out.println("... successfully added");
-            return true;
-            //TODO: add boolean check and prints in the main
-        } else {
-            System.out.println("Unable to fit your party in the cabin!");
-            return false;
+    public boolean canAddParty(Party p){
+        Cabin requested = cabins.get(p.getRequestedCabin());
+        if (requested.canAddParty(p)) return true;
+        else return false;
+    }
+    public void addParty(Party p) {
+        if (canAddParty(p)) {
+            Cabin requested = cabins.get(p.getRequestedCabin());
+            requested.addParty(p);
+        }
+        else {
+            throw new IllegalArgumentException("Cannot add party to cabin");
         }
     }
 

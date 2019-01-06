@@ -4,10 +4,7 @@ import people.Party;
 import people.Person;
 import people.SeatType;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 public class Cabin {
     private final CabinType type;
@@ -17,30 +14,35 @@ public class Cabin {
     Cabin(CabinType type, int size) {
         this.type = type;
         this.parties = new ArrayList<>();
-        this.cabinRows = CabinRow.forTypeAndSize(type, size);
+        this.cabinRows = CabinRow.createCabin(type, size);
     }
 
-    public boolean addParty(Party party) {
+    public boolean canAddParty(Party party) {
+        for (CabinRow row : cabinRows) {
+            if (row.canFitParty(party)) return true;
+        }
+        return false;
+    }
+
+    public void addParty(Party party) {
+        if(!canAddParty(party)) throw new IllegalArgumentException("Party specified cannot join this cabin.");
         for (CabinRow row : cabinRows) {
             if (row.canFitParty(party)) {
                 row.addParty(party);
                 parties.add(party);
-                return true;
+                break;
             }
         }
-        return false;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(type.toString()).append('\n');
         for (CabinRow cr : cabinRows) {
             sb.append('\n');
             sb.append(cr.toString());
             sb.append('\n');
         }
-
         return sb.toString();
     }
 
@@ -50,24 +52,24 @@ public class Cabin {
         private final Row left;
         private final Row right;
 
+        enum RowSide {LEFT, RIGHT};
+
         private CabinRow(CabinType type) {
-            this.left = new Row(type);
-            this.right = new Row(type);
+            this.left = new Row(RowSide.LEFT, type);
+            this.right = new Row(RowSide.RIGHT, type);
         }
 
-        static CabinRow[] forTypeAndSize(CabinType type, int n) {
+        static CabinRow[] createCabin(CabinType type, int n) {
             CabinRow[] res = new CabinRow[n];
             for (int i = 0; i < n; i++) res[i] = new CabinRow(type);
             return res;
         }
 
         boolean canFitParty(Party party) {
-            return hasAvailable(party.getRequestedSeatTypes());
-        }
-
-        private boolean hasAvailable(Iterable<SeatType> types) {
+            Iterable<SeatType> types = party.getRequestedSeatTypes();
             return left.hasAvailable(types) || right.hasAvailable(types);
         }
+
 
         void addParty(Party party) {
             if (!canFitParty(party))
@@ -79,23 +81,50 @@ public class Cabin {
         }
 
         public String toString() {
-            return "LEFT SIDE: \t" + left.toString() + "\nRIGHT SIDE: \t" + right.toString();
+            StringBuilder sb = new StringBuilder();
+            int maxLength = 50;
+            String format = "%-" + maxLength+"s\t";
+            sb.append(String.format(format, left));
+            format = "%" + maxLength+"s\t";
+            sb.append(String.format(format, right));
+            return sb.toString();
         }
 
         private static class Row {
-
+            private final RowSide side;
+            private final CabinType cabinType;
             private final HashSet<SeatType> availableSeatTypes;
             private final HashMap<SeatType, Person> takenSeats;
 
-            Row(CabinType cabinType) {
+            Row(RowSide side,CabinType cabinType) {
+                this.side = side;
+                this.cabinType = cabinType;
                 this.availableSeatTypes = new HashSet<>();
                 this.takenSeats = new HashMap<>();
                 this.setSeats(cabinType);
             }
 
-            public String toString() {
-                return "\nAvailable Seats: " + availableSeatTypes +
-                        "\nOccupied seats: " + takenSeats;
+            public String toString(){
+                StringBuilder sb = new StringBuilder();
+                int maxLength = 10;
+                String format = "%" + maxLength+"s\t";
+                    if(side == RowSide.LEFT) {
+                        sb.append(String.format(format, getDiagramKey(SeatType.WINDOW)));
+                        if(cabinType == CabinType.ECONOMY)
+                            sb.append(String.format(format, getDiagramKey(SeatType.CENTER)));
+                        sb.append(String.format(format, getDiagramKey(SeatType.AISLE)));
+                    }else{//right
+                        sb.append(String.format(format, getDiagramKey(SeatType.AISLE)));
+                        if(cabinType == CabinType.ECONOMY)
+                            sb.append(String.format(format, getDiagramKey(SeatType.CENTER)));
+                        sb.append(String.format(format, getDiagramKey(SeatType.WINDOW)));
+                    }
+
+                return sb.toString();
+            }
+
+            private String getDiagramKey(SeatType type){
+                return takenSeats.get(type) != null ? "[ X ]" : "[ O ]";
             }
 
             private void setSeats(CabinType cabinType) {
@@ -124,14 +153,10 @@ public class Cabin {
             void addParty(Party party) {
                 if (!hasAvailable(party.getRequestedSeatTypes()))
                     throw new IllegalStateException("This party cannot be added because these rows are full");
-
-                for (SeatType requested : party.getRequestedSeatTypes()) {
+                for (SeatType requested : party.getRequestedSeatTypes())
                     availableSeatTypes.remove(requested);
-                }
-                for (Person p : party.getMembers()) {
+                for (Person p : party.getMembers())
                     takenSeats.put(p.getSeatPreference(), p);
-                }
-
             }
         }
 
