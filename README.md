@@ -4,6 +4,8 @@
 
 Original Project Timeline: _January 2017 - May 2017_
 
+*Original Members and Initial Creators*
+
 Team JAM: [Juan Guerrero](https://github.com/juang97), Alfayed Baksh, [Maynard Santos](https://github.com/mayntos)
 
 # Project description
