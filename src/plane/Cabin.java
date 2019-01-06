@@ -2,7 +2,6 @@ package plane;
 
 import people.Party;
 import people.Person;
-import people.SeatType;
 
 import java.util.*;
 
@@ -14,7 +13,7 @@ public class Cabin {
     Cabin(CabinType type, int size) {
         this.type = type;
         this.parties = new ArrayList<>();
-        this.cabinRows = CabinRow.createCabin(type, size);
+        this.cabinRows = CabinRow.createCabinRows(type, size);
     }
 
     public boolean canAddParty(Party party) {
@@ -57,7 +56,7 @@ public class Cabin {
             this.right = new Row(RowSide.RIGHT, type);
         }
 
-        static CabinRow[] createCabin(CabinType type, int n) {
+        static CabinRow[] createCabinRows(CabinType type, int n) {
             CabinRow[] res = new CabinRow[n];
             Arrays.fill(res, new CabinRow(type));
             return res;
@@ -103,7 +102,7 @@ public class Cabin {
                 this.setSeats(cabinType);
             }
 
-            //TODO: Find an a more appropriate object oriented design pattern for creating a string for printing
+            //TODO: Find a more appropriate object oriented design pattern for creating a string for printing
             //the diagram.
             public String toString() {
                 StringBuilder sb = new StringBuilder();

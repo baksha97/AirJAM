@@ -1,8 +1,8 @@
 import people.Party;
 import people.Person;
-import people.SeatType;
 import plane.CabinType;
 import plane.Plane;
+import plane.SeatType;
 
 import java.util.ArrayList;
 import java.util.HashSet;

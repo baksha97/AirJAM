@@ -1,5 +1,7 @@
 package people;
 
+import plane.SeatType;
+
 public class Person {
 
     private final SeatType seatPreference;

@@ -1,6 +1,7 @@
 package people;
 
 import plane.CabinType;
+import plane.SeatType;
 
 import java.util.ArrayList;
 import java.util.HashSet;

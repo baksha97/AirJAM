@@ -20,12 +20,10 @@ public class Plane {
     }
 
     public void addParty(Party p) {
-        if (canAddParty(p)) {
-            Cabin requested = cabins.get(p.getRequestedCabin());
-            requested.addParty(p);
-        } else {
+        if (!canAddParty(p))
             throw new IllegalArgumentException("Cannot add party to cabin");
-        }
+        Cabin requested = cabins.get(p.getRequestedCabin());
+        requested.addParty(p);
     }
 
     @Override
