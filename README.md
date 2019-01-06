@@ -103,7 +103,7 @@ _January 2019 - TBD_
  - Analyze maintainability and scalability for possible changes in Cabin and Plane.
  
  Unit Testing & J-Unit Testing:
- - Very each component is working as intended throughout the development process.
+ - Verify each component is working as intended throughout the development process.
  
  
  
