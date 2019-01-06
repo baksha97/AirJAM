@@ -14,17 +14,16 @@ public class Plane {
         cabins.put(CabinType.ECONOMY, new Cabin(CabinType.ECONOMY, size));
     }
 
-    public boolean canAddParty(Party p){
+    public boolean canAddParty(Party p) {
         Cabin requested = cabins.get(p.getRequestedCabin());
-        if (requested.canAddParty(p)) return true;
-        else return false;
+        return requested.canAddParty(p);
     }
+
     public void addParty(Party p) {
         if (canAddParty(p)) {
             Cabin requested = cabins.get(p.getRequestedCabin());
             requested.addParty(p);
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("Cannot add party to cabin");
         }
     }

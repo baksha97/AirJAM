@@ -25,7 +25,7 @@ public class Cabin {
     }
 
     public void addParty(Party party) {
-        if(!canAddParty(party)) throw new IllegalArgumentException("Party specified cannot join this cabin.");
+        if (!canAddParty(party)) throw new IllegalArgumentException("Party specified cannot join this cabin.");
         for (CabinRow row : cabinRows) {
             if (row.canFitParty(party)) {
                 row.addParty(party);
@@ -52,8 +52,6 @@ public class Cabin {
         private final Row left;
         private final Row right;
 
-        enum RowSide {LEFT, RIGHT};
-
         private CabinRow(CabinType type) {
             this.left = new Row(RowSide.LEFT, type);
             this.right = new Row(RowSide.RIGHT, type);
@@ -61,7 +59,7 @@ public class Cabin {
 
         static CabinRow[] createCabin(CabinType type, int n) {
             CabinRow[] res = new CabinRow[n];
-            for (int i = 0; i < n; i++) res[i] = new CabinRow(type);
+            Arrays.fill(res, new CabinRow(type));
             return res;
         }
 
@@ -69,7 +67,6 @@ public class Cabin {
             Iterable<SeatType> types = party.getRequestedSeatTypes();
             return left.hasAvailable(types) || right.hasAvailable(types);
         }
-
 
         void addParty(Party party) {
             if (!canFitParty(party))
@@ -83,12 +80,14 @@ public class Cabin {
         public String toString() {
             StringBuilder sb = new StringBuilder();
             int maxLength = 50;
-            String format = "%-" + maxLength+"s\t";
+            String format = "%-" + maxLength + "s\t";
             sb.append(String.format(format, left));
-            format = "%" + maxLength+"s\t";
+            format = "%" + maxLength + "s\t";
             sb.append(String.format(format, right));
             return sb.toString();
         }
+
+        enum RowSide {LEFT, RIGHT}
 
         private static class Row {
             private final RowSide side;
@@ -96,7 +95,7 @@ public class Cabin {
             private final HashSet<SeatType> availableSeatTypes;
             private final HashMap<SeatType, Person> takenSeats;
 
-            Row(RowSide side,CabinType cabinType) {
+            Row(RowSide side, CabinType cabinType) {
                 this.side = side;
                 this.cabinType = cabinType;
                 this.availableSeatTypes = new HashSet<>();
@@ -104,26 +103,28 @@ public class Cabin {
                 this.setSeats(cabinType);
             }
 
-            public String toString(){
+            //TODO: Find an a more appropriate object oriented design pattern for creating a string for printing
+            //the diagram.
+            public String toString() {
                 StringBuilder sb = new StringBuilder();
                 int maxLength = 10;
-                String format = "%" + maxLength+"s\t";
-                    if(side == RowSide.LEFT) {
-                        sb.append(String.format(format, getDiagramKey(SeatType.WINDOW)));
-                        if(cabinType == CabinType.ECONOMY)
-                            sb.append(String.format(format, getDiagramKey(SeatType.CENTER)));
-                        sb.append(String.format(format, getDiagramKey(SeatType.AISLE)));
-                    }else{//right
-                        sb.append(String.format(format, getDiagramKey(SeatType.AISLE)));
-                        if(cabinType == CabinType.ECONOMY)
-                            sb.append(String.format(format, getDiagramKey(SeatType.CENTER)));
-                        sb.append(String.format(format, getDiagramKey(SeatType.WINDOW)));
-                    }
+                String format = "%" + maxLength + "s\t";
+                if (side == RowSide.LEFT) {
+                    sb.append(String.format(format, getDiagramKey(SeatType.WINDOW)));
+                    if (cabinType == CabinType.ECONOMY)
+                        sb.append(String.format(format, getDiagramKey(SeatType.CENTER)));
+                    sb.append(String.format(format, getDiagramKey(SeatType.AISLE)));
+                } else {//right
+                    sb.append(String.format(format, getDiagramKey(SeatType.AISLE)));
+                    if (cabinType == CabinType.ECONOMY)
+                        sb.append(String.format(format, getDiagramKey(SeatType.CENTER)));
+                    sb.append(String.format(format, getDiagramKey(SeatType.WINDOW)));
+                }
 
                 return sb.toString();
             }
 
-            private String getDiagramKey(SeatType type){
+            private String getDiagramKey(SeatType type) {
                 return takenSeats.get(type) != null ? "[ X ]" : "[ O ]";
             }
 

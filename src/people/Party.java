@@ -19,7 +19,7 @@ public class Party {
         addPerson(people);
     }
 
-    public void addPerson(Person... people){
+    public void addPerson(Person... people) {
         for (Person p : people) {
             members.add(p);
             if (requestedSeatTypes.contains(p.getSeatPreference()))
@@ -31,9 +31,10 @@ public class Party {
         if (members.size() > MAX_SIZE) throw new IllegalStateException("Parties cannot be larger than three");
     }
 
-    public boolean isFull(){
+    public boolean isFull() {
         return members.size() > MAX_SIZE;
     }
+
     public String toString() {
         return members.toString();
     }
@@ -53,7 +54,7 @@ public class Party {
     private void setRequestedCabin(CabinType requestedCabin) {
         this.requestedCabin = requestedCabin;
         setOpenSeatTypes(new HashSet<>());
-        switch(requestedCabin){
+        switch (requestedCabin) {
             case FIRST:
                 openSeatTypes.add(SeatType.WINDOW);
                 openSeatTypes.add(SeatType.AISLE);

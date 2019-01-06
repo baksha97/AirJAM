@@ -12,7 +12,7 @@ public enum CabinType {
         this.value = value;
     }
 
-    public static Optional<CabinType> valueOf(int value){
+    public static Optional<CabinType> valueOf(int value) {
         return Arrays.stream(values())
                 .filter(cabinType -> cabinType.value == value)
                 .findFirst();
