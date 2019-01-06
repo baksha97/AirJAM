@@ -12,7 +12,7 @@ public class ReservationSystem {
 
     public static void main(String[] args) {
 
-        Plane jam = new Plane(3);
+        Plane jam = new Plane(4);
         System.out.println(jam);
 
         Scanner in = new Scanner(System.in);
@@ -44,11 +44,8 @@ public class ReservationSystem {
     }
 
     private static void makePersonForParty(Scanner in, Party party) {
-        int exit = 1;
-        while (!party.getOpenSeatTypes().isEmpty() && !party.isFull() && exit != -1) {
+        while (!party.getOpenSeatTypes().isEmpty() && !party.isFull()) {
             try {
-                System.out.println("Please enter your name: ");
-                String name = in.next();
 
                 System.out.println("Please choose a seating option: ");
                 HashSet<SeatType> openSeatTypes = party.getOpenSeatTypes();
@@ -60,18 +57,16 @@ public class ReservationSystem {
 
                 System.out.println("Else exit to main menu.");
                 int choice = in.nextInt() - 1;
-                if (remaining.get(choice) != null) {
-                    party.addPerson(new Person(name, remaining.get(choice)));
-                    openSeatTypes.remove(remaining.get(choice));
-                } else {
-                    break;
-                }
+                if (choice < 0 || choice >= remaining.size() || remaining.get(choice) == null) break;
 
+
+                System.out.println("Please enter your name: ");
+                String name = in.next();
+
+                party.addPerson(new Person(name, remaining.get(choice)));
 
                 System.out.println("Current party: " + party);
 
-                System.out.println("If party is complete, enter -1, else enter any number");
-                exit = in.nextInt();
             } catch (Exception e) {
                 System.out.println("Try again.");
             }

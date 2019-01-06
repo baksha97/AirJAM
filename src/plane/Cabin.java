@@ -3,7 +3,10 @@ package plane;
 import people.Party;
 import people.Person;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 
 public class Cabin {
     private final CabinType type;
@@ -58,7 +61,7 @@ public class Cabin {
 
         static CabinRow[] createCabinRows(CabinType type, int n) {
             CabinRow[] res = new CabinRow[n];
-            Arrays.fill(res, new CabinRow(type));
+            for (int i = 0; i < res.length; i++) res[i] = new CabinRow(type);
             return res;
         }
 

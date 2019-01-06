@@ -28,6 +28,7 @@ public class Party {
             if (p.getSeatPreference() == SeatType.CENTER && requestedCabin == CabinType.FIRST)
                 throw new IllegalArgumentException("There exists no center seat in First class.");
             requestedSeatTypes.add(p.getSeatPreference());
+            openSeatTypes.remove(p.getSeatPreference());
         }
         if (members.size() > MAX_SIZE) throw new IllegalStateException("Parties cannot be larger than three");
     }
@@ -65,6 +66,8 @@ public class Party {
                 openSeatTypes.add(SeatType.CENTER);
                 openSeatTypes.add(SeatType.AISLE);
                 break;
+            default:
+                throw new IllegalArgumentException("Requested cabin defaulted open seats have not been initialized");
         }
     }
 
